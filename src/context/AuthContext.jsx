@@ -34,7 +34,7 @@ export const AuthContextProvider = ({ children }) => {
   const signInUser = async (email, password) => {
     //  but we will call in signin as there we are getting user email n pass
 
-    // ! authenticate user if have this inputted this email/pass
+    // ! authenticate user if have  this inputted this email/pass
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -60,8 +60,27 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  //Auth functions (signup, logout)
+  // ! sign out user and clear session
+  const signOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error("Supabase sign-out error:", error.message);
+        return { success: false, error: error.message };
+      }
+      return { success: true };
+    } catch (error) {
+      console.error("Unexpected error during sign-out:", error.message);
+      return {
+        success: false,
+        error: "An unexpected error occurred. Please try again.",
+      };
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ session, signInUser }}>
+    <AuthContext.Provider value={{ session, signInUser, signOut }}>
       {children}
     </AuthContext.Provider>
   );

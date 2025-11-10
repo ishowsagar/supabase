@@ -26,12 +26,13 @@ h2 {
 header {
   background-color: #134e32;
   width: 100vw;
+  box-sizing: border-box;/* new */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  padding: 2rem 0;
-  height: 3.6rem;
+  padding: 0.4rem;/* new */
+  height: 7rem;/* new */
   display: flex;
   flex-direction: column;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -46,6 +47,60 @@ header h1 {
   justify-content: center;
   align-items: center;
   font-size: 1.8rem;
+}
+
+/* Header email */
+.header-email {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 0;
+}
+
+.header-email h2 {
+  margin: 0;
+  font-size: 0.8rem;/* new */
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+  letter-spacing: 0px;
+}
+
+.header-email .account-type {
+  margin-left: 2rem;
+}
+
+.header-email button {
+  display: inline-block;
+  padding: 0.2rem 0.4rem;/* new */
+  margin-top: 0;
+  border: 0.5px solid rgba(255, 255, 255, 0.8);/* new */
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #134e32;/* new */
+  color: rgba(255, 255, 255, 0.8);/* new */
+  font-size: 0.8rem;/* new */
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.header-email button:hover {
+  background-color: #124f33;/* new */
+  border-color: #f0f0f0;
+  transform: translateY(-1px);
+}
+
+.header-email button:active {
+  transform: translateY(0);
+  background-color: #e0e0e0;
+  border-color: #e0e0e0;
+}
+
+.header-email .error-message {
+  color: red;
+  text-align: center;
+  margin: 0;
+  font-size: 1rem;
 }
 
 .dashboard-wrapper {
@@ -159,4 +214,145 @@ input:disabled {
   color: #dc3545;
   border-radius: 4px;
   text-align: center;
+}
+
+/* Signin/Signup Form styles */
+.sign-form-container {
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 2.5rem;
+  border: 1px solid #e4e4e4;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sign-form-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.sign-form-container h2 {
+  font-weight: 600;
+  font-size: 1.75rem;
+  padding-bottom: 1rem;
+  margin: 0;
+  color: #082c1b;
+}
+
+.sign-form-container .form-link {
+  color: #187c49;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  padding-bottom: 1px;
+  border-bottom: 1px solid transparent;
+}
+
+.sign-form-container .form-link:hover {
+  color: #124f33;
+}
+
+.sign-form-container .form-input {
+  width: 100%;
+  margin: 1rem 0;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid #e4e4e4;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 400;
+  background-color: white;
+  color: #082c1b;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box; /* Ensures padding is included in width calculation */
+}
+
+.sign-form-container .form-input:focus {
+  outline: none;
+  border-color: #124f33;
+  box-shadow: 0 0 0 3px rgba(18, 79, 51, 0.1);
+}
+
+.sign-form-container fieldset {
+  border: 1.5px solid #e4e4e4;
+  border-radius: 5px;
+  padding: 0.6rem;
+}
+
+.sign-form-container .form-button {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 5px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #124f33;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.sign-form-container .form-button:hover {
+  background-color: #187c49;
+  transform: translateY(-1px);
+}
+
+.sign-form-container .form-button:active {
+  transform: translateY(0);
+}
+
+.sign-form-container .form-button:disabled {
+  background-color: #6c757d;
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sign-form-container .radio-group {
+  display: flex;
+  justify-content: space-between;
+  /* gap: 1rem; */
+}
+
+.sign-form-container .radio-group label {
+  margin-left: 3.5rem;
+  flex: 1;
+  text-align: center; /* optional: center label text */
+}
+
+.sign-form-container input {
+  margin-right: 0.5rem;
+  margin-top: 0;
+}
+
+/* landing header */
+.landing-header {
+text-align: center;
+font-size: 3.5rem;
+line-height: 1.2;
+margin-bottom: 0.7rem;
+padding: 1.5rem 1rem 0.2rem;
+margin-top: 0;
+color: #082c1b;
+font-weight: 700;
+letter-spacing: -2.5px;
+background: linear-gradient(45deg, #082c1b, #0dc566);
+-webkit-background-clip: text;
+background-clip: text;
+-webkit-text-fill-color: transparent;
+animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

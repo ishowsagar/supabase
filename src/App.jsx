@@ -1,6 +1,6 @@
 // App: root component that renders the Header and Dashboard
-import Dashboard from "./Dashboard";
-import Header from "./Header";
+import Dashboard from "./routes/Dashboard";
+import Header from "./components/Header";
 
 function App() {
   return (
@@ -9,6 +9,6 @@ function App() {
       <Dashboard />
     </>
   );
-};
+}
 
 export default App;

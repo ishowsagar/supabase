@@ -13,7 +13,8 @@
     "@supabase/supabase-js": "^2.49.2",
     "react": "^19.0.0",
     "react-charts": "^3.0.0-beta.57",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.9.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

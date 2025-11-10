@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Signup = () => {
   // todo add signup logic with useActionState and signUpUser from context
-  
+
   return (
     <>
       <h1 className="landing-header">Paper Like A Boss</h1>

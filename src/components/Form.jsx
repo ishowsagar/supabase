@@ -12,7 +12,7 @@ function Form({ metrics }) {
         value: formData.get("value"),
       };
       console.log(newDeal);
-      
+
       // todo insert new deal into Supabase
       const { error } = await supabase.from("sales_deals").insert(newDeal);
       if (error) {
