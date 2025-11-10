@@ -1,3 +1,4 @@
+// Form: UI for adding a new sales deal (submits to Supabase)
 import { useActionState } from 'react';
 import supabase from './supabase-client';
 

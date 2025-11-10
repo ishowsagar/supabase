@@ -1,3 +1,4 @@
+// Header: top banner and title for the dashboard
 function Header() {
   return (
     <>

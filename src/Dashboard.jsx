@@ -1,3 +1,4 @@
+// Dashboard: displays sales chart and listens for realtime updates from Supabase
 import supabase from './supabase-client';
 import { useEffect, useState } from 'react';
 import { Chart } from 'react-charts';
