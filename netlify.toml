@@ -2,6 +2,12 @@
   command = "npm run build"
   publish = "dist"
 
-# Optional: set NODE_VERSION if you want Netlify to use a specific Node version
-# [context.production.environment]
-#   NODE_VERSION = "18"
+# Set Node version for Netlify (React 19 needs Node 18+)
+[context.production.environment]
+  NODE_VERSION = "20"
+
+# Redirect all routes to index.html for SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
