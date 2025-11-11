@@ -5,6 +5,7 @@ const AuthContext = createContext();
 // render its children and provide access to session state
 export const AuthContextProvider = ({ children }) => {
   const [session, setSession] = useState(undefined);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     async function getInitialSession() {
@@ -26,6 +27,22 @@ export const AuthContextProvider = ({ children }) => {
       setSession(session);
       console.log("session changed :", session);
     });
+
+    async function fetchUsers() {
+      try {
+        const { data, error } = await supabase
+          .from("user_profiles")
+          .select("id,name,account_type");
+        if (error) {
+          throw error; // * throw the Supabase error directly
+        }
+        console.log(data);
+        setUsers(data);
+      } catch (err) {
+        console.error("error fetching users:", err);
+      }
+    }
+    fetchUsers();
   }, []);
 
   //*Auth functions (signin, signup, logout)
@@ -81,23 +98,28 @@ export const AuthContextProvider = ({ children }) => {
 
   //*Auth user (signup)
   // ! sign up user and authenticate him and load site without have to sign in.
-  const signUpNewUser = async (email, password,name,accountType) => {
+  const signUpNewUser = async (email, password, name, accountType) => {
     try {
+      // * log what we're sending to debug
+      console.log("Signing up with:", { email, name, accountType });
+
       const { data, error } = await supabase.auth.signUp({
         email: email.toLowerCase(),
         password: password,
-        options:{
-          data : {
-            name : name,
-            account_type : accountType
-          }
-        }
+        options: {
+          data: {
+            name: name,
+            account_type: accountType,
+          },
+        },
       });
       if (error) {
         console.error("Supabase sign-up error:", error.message);
+        console.error("Full error:", error);
         return { success: false, error: error.message };
       }
       console.log("Supabase sign-up success:", data);
+      console.log("User metadata:", data.user?.user_metadata);
       return { success: true, data };
     } catch (error) {
       console.error("Unexpected error during sign-up:", error.message);
