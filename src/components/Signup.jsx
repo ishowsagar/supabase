@@ -1,14 +1,46 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useActionState } from "react";
 
 const Signup = () => {
   // todo add signup logic with useActionState and signUpUser from context
+  const navigate_To_Site_Once_SignedUp = useNavigate();
+  const { signUpNewUser } = useAuth();
+
+  const [error, submitAction, isPending] = useActionState(
+    async (prevState, formData) => {
+      const email = formData.get("email");
+      const password = formData.get("password");
+
+      // * user gets signed up when inputs email,password
+      // signUp auth is invoked when user input email and pass to submit
+      const {
+        success,
+        error: signUpError,
+        data,
+      } = await signUpNewUser(email, password);
+
+      if (signUpError) {
+        return new Error(signUpError);
+      }
+
+      // *! successfully signup --> navigate user to "/dash..."
+      if (success && data?.session) {
+        navigate_To_Site_Once_SignedUp("/dashboard");
+        return null;
+      }
+      // * fallback if both conditions fails
+      return null;
+    },
+    null
+  );
 
   return (
     <>
       <h1 className="landing-header">Paper Like A Boss</h1>
       <div className="sign-form-container">
         <form
-          // action={} // todo wire up signup action
+          action={submitAction} // grab formData to access what user inputs from form els
           aria-label="Sign up form"
           aria-describedby="form-description"
         >
@@ -35,9 +67,9 @@ const Signup = () => {
             placeholder=""
             required
             aria-required="true"
-            //aria-invalid=
-            //aria-describedby=
-            //disabled=
+            aria-invalid={error ? "true" : "false"}
+            aria-describedby={error ? "signup-error" : undefined}
+            disabled={isPending}
           />
 
           {/* ! Password input */}
@@ -50,23 +82,31 @@ const Signup = () => {
             placeholder=""
             required
             aria-required="true"
-            //aria-invalid=
-            //aria-describedby=
-            //disabled=
+            aria-invalid={error ? "true" : "false"}
+            aria-describedby={error ? "signup-error" : undefined}
+            disabled={isPending}
           />
 
           {/* ? Submit button */}
           <button
             type="submit"
             className="form-button"
-            //disabled=
-            //aria-busy=
+            disabled={isPending}
+            aria-busy={isPending}
           >
-            Sign Up
-            {/*'Signing up...' when pending*/}
+            {isPending ? "Signing up..." : "Sign up"}
           </button>
 
-          {/* todo show error message if signup fails */}
+          {/*  todo - display error to the user if there is an error */}
+          {error && (
+            <div
+              id="signup-error"
+              role="alert"
+              className="sign-form-error-message"
+            >
+              {error.message}
+            </div>
+          )}
         </form>
       </div>
     </>
