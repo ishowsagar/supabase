@@ -220,7 +220,7 @@ input:disabled {
 .sign-form-container {
   max-width: 28rem;
   margin: 0 auto;
-  padding: 2.5rem;
+  padding: 1.6rem 2.5rem 1.8rem 2.5rem;
   border: 1px solid #e4e4e4;
   border-radius: 5px;
   background: white;
@@ -257,7 +257,7 @@ input:disabled {
 
 .sign-form-container .form-input {
   width: 100%;
-  margin: 1rem 0;
+  margin: 0.5rem 0 1rem 0;
   padding: 0.8rem 1rem;
   border: 1.5px solid #e4e4e4;
   border-radius: 5px;
@@ -328,13 +328,47 @@ input:disabled {
   margin-top: 0;
 }
 
+.sign-form-container .radio-group {
+  display: flex;
+  justify-content: space-between;
+  /* gap: 1rem; */
+}
+
+.sign-form-container .radio-group label {
+  margin-left: 3.5rem;
+  flex: 1;
+  text-align: center; /* optional: center label text */
+  align-items: center;
+}
+
+/* default styling for input radio button when no checked */
+.sign-form-container .radio-group input:not(:checked) {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  position: relative;
+  cursor: pointer;
+}
+
+.sign-form-container .radio-group input {
+  margin-right: 0.5rem;
+  margin-top: 0;
+  accent-color: blue;
+  width: 16px;
+  height: 16px;
+}
+
 /* landing header */
 .landing-header {
 text-align: center;
 font-size: 3.5rem;
 line-height: 1.2;
 margin-bottom: 0.7rem;
-padding: 1.5rem 1rem 0.2rem;
+padding: 0.6rem 1rem 0.2rem;
 margin-top: 0;
 color: #082c1b;
 font-weight: 700;

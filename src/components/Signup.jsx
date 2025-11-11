@@ -11,6 +11,8 @@ const Signup = () => {
     async (prevState, formData) => {
       const email = formData.get("email");
       const password = formData.get("password");
+      const name = formData.get("name");
+      const accountType = formData.get("account-type");
 
       // * user gets signed up when inputs email,password
       // signUp auth is invoked when user input email and pass to submit
@@ -18,7 +20,7 @@ const Signup = () => {
         success,
         error: signUpError,
         data,
-      } = await signUpNewUser(email, password);
+      } = await signUpNewUser(email, password,name,accountType);
 
       if (signUpError) {
         return new Error(signUpError);
@@ -57,6 +59,21 @@ const Signup = () => {
             </Link>
           </p>
 
+          {/* Name input */}
+          <label htmlFor="name">Name</label>
+          <input
+            className="form-input"
+            type="text"
+            name="name"
+            id="name"
+            placeholder=""
+            required
+            aria-required="true"
+            aria-invalid={error ? "true" : "false"}
+            aria-describedby={error ? "signup-error" : undefined}
+            disabled={isPending}
+          />
+
           {/* ! Email input */}
           <label htmlFor="email">Email</label>
           <input
@@ -86,6 +103,30 @@ const Signup = () => {
             aria-describedby={error ? "signup-error" : undefined}
             disabled={isPending}
           />
+
+          {/* select account-type input */}
+          <fieldset
+            className="form-fieldset"
+            aria-required="true"
+            aria-label="Select your role"
+          >
+            <legend>Select your role</legend>
+            <div className="radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="account-type"
+                  value="admin"
+                  required
+                />{" "}
+                Admin
+              </label>
+              <label>
+                <input type="radio" name="account-type" value="rep" required />{" "}
+                Sales Rep
+              </label>
+            </div>
+          </fieldset>
 
           {/* ? Submit button */}
           <button

@@ -81,7 +81,7 @@ export const AuthContextProvider = ({ children }) => {
 
   //*Auth user (signup)
   // ! sign up user and authenticate him and load site without have to sign in.
-  const signUpNewUser = async (email, password) => {
+  const signUpNewUser = async (email, password,name,accountType) => {
     try {
       const { data, error } = await supabase.auth.signUp({
         email: email.toLowerCase(),
