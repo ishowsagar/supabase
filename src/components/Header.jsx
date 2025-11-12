@@ -36,22 +36,22 @@ function Header() {
     <>
       <header role="banner" aria-label="Dashboard header">
         <div
-          className="header-enail"
+          className="header-email"
           role="navigation"
           aria-label="User account navigation"
         >
           <h2>
-            <span className="sr-only">Logged in as :</span>
+            <span className="sr-only">Logged in as:</span>
             {currentUser?.name} ({displayAccountType})
           </h2>
-          <button onClick={handleSignOut} aria-label="Sign out of your account">
-            Sign out
-          </button>
           {error && (
-            <div role="role" className="error-message" id="signout-error">
+            <div role="alert" className="error-message" id="signout-error">
               {error}
             </div>
           )}
+          <button onClick={handleSignOut} aria-label="Sign out of your account">
+            Sign out
+          </button>
         </div>
         <h1>
           <svg
