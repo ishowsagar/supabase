@@ -1,14 +1,23 @@
 // Form: UI for adding a new sales deal (submits to Supabase)
 import { useActionState } from "react";
 import supabase from "../supabase-client";
+import { useAuth } from "../context/AuthContext";
 
 function Form({ metrics }) {
+  const { users } = useAuth();
+
   // ? handle form submission with async action
   const [error, submitAction, isPending] = useActionState(
     async (previousState, formData) => {
+      // inpuutted name in the form submitting time
+      const submittedName = formData.get("name");
+
+      //  ? does that submitted name exists in users which have all data of logged inusers with id,name and acc_type as always
+      const user = users.find((user) => user.name === submittedName);
       // ! get form values
       const newDeal = {
-        name: formData.get("name"),
+        // !IMPORTANT - fetching id from user found in user_profiles data who is signed in
+        user_id: user.id,
         value: formData.get("value"),
       };
       console.log(newDeal);
@@ -25,13 +34,16 @@ function Form({ metrics }) {
     null // Initial state
   );
 
-  // generate dropdown options from metrics
+  // generate dropdown options from user_profiles table(whihc has name,id,acc_type info cols )
+  // mapping over each user in user_profiles table to generate options in select menu for each name
   const generateOptions = () => {
-    return metrics.map((metric) => (
-      <option key={metric.name} value={metric.name}>
-        {metric.name}
-      </option>
-    ));
+    return users.map((user) => {
+      return (
+        <option key={user.id} value={user.name}>
+          {user.name}
+        </option>
+      );
+    });
   };
 
   return (
