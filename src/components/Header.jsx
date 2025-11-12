@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 
 // Header: top banner and title for the dashboard
 function Header() {
-  const { signOut,session  } = useAuth();
+  const { signOut, session, users } = useAuth();
   const [error, setError] = useState(null);
-  const navigateBackToLandingPage = useNavigate() 
+  const navigateBackToLandingPage = useNavigate();
+
+  // ! look for user who is currently live-on-site
+  const currentUser = users.find((user) => user?.id === session?.user?.id);
 
   // ! handle sign out action
   const handleSignOut = async (e) => {
@@ -14,11 +17,21 @@ function Header() {
     const { success, error } = await signOut();
     if (success) {
       // ? navigate to "/" (home/signin page)
-      navigateBackToLandingPage("/")
+      navigateBackToLandingPage("/");
     } else {
       setError(error.message);
     }
   };
+
+  const accountTypeMap = {
+    rep: "Sales rep",
+    admin: "Admin",
+  };
+
+  const displayAccountType = currentUser?.account_type
+    ? accountTypeMap[currentUser.account_type]
+    : "";
+
   return (
     <>
       <header role="banner" aria-label="Dashboard header">
@@ -29,7 +42,8 @@ function Header() {
         >
           <h2>
             <span className="sr-only">Logged in as :</span>
-            {session?.user?.message}</h2>
+            {currentUser?.name} ({displayAccountType})
+          </h2>
           <button onClick={handleSignOut} aria-label="Sign out of your account">
             Sign out
           </button>
