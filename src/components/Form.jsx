@@ -3,8 +3,8 @@ import { useActionState } from "react";
 import supabase from "../supabase-client";
 import { useAuth } from "../context/AuthContext";
 
-function Form({ metrics }) {
-  const { users,session } = useAuth();
+function Form() {
+  const { users, session } = useAuth();
 
   // ? handle form submission with async action
   const [error, submitAction, isPending] = useActionState(
@@ -34,19 +34,28 @@ function Form({ metrics }) {
     null // Initial state
   );
 
-  // ! finding currwent user who is live-on-site
-  const currentUser = users.find(user => user.id === session?.user?.id)
+  // ! finding current user who is live-on-site
+  // ? optinal chaining to check for it does not cause any runtime errors
+  //  its like saying --> does session exist? exists -->
+  // return its user property --> does prop exists --> return that
+  const currentUser = users.find((user) => user.id === session?.user?.id);
 
   // generate dropdown options from user_profiles table(whihc has name,id,acc_type info cols )
   // mapping over each user in user_profiles table to generate options in select menu for each name
   const generateOptions = () => {
-    return users.map((user) => {
-      return (
-        <option key={user.id} value={user.name}>
-          {user.name}
-        </option>
-      );
-    });
+    return (
+      users
+        // ! we just want 'rep' names in options 👇,
+        // *to filter out unwanted Admin data
+        // .filter((user) => user.account_type === "rep")
+        .map((user) => {
+          return (
+            <option key={user.id} value={user.name}>
+              {user.name}
+            </option>
+          );
+        })
+    );
   };
 
   return (
@@ -61,19 +70,35 @@ function Form({ metrics }) {
           the amount.
         </div>
 
-        <label htmlFor="deal-name">
-          Name:
-          <select
-            id="deal-name"
-            name="name"
-            defaultValue={metrics?.[0]?.name || ""}
-            aria-required="true"
-            aria-invalid={error ? "true" : "false"}
-            disabled={isPending}
-          >
-            {generateOptions()}
-          </select>
-        </label>
+        {currentUser?.account_type === "rep" ? (
+          <label htmlFor="deal-name">
+            Name:
+            <input
+              id="deal-name"
+              name="name"
+              type="text"
+              value={currentUser?.name || ""}
+              readOnly="true"
+              className="rep-name-input"
+              aria-label="Sales representive name"
+              aria-readonly="true"
+            />
+          </label>
+        ) : (
+          <label htmlFor="deal-name">
+            Name:
+            <select
+              id="deal-name"
+              name="name"
+              defaultValue={users?.[0]?.name || ""}
+              aria-required="true"
+              aria-invalid={error ? "true" : "false"}
+              disabled={isPending}
+            >
+              {generateOptions()}
+            </select>
+          </label>
+        )}
 
         <label htmlFor="deal-value">
           Amount: $

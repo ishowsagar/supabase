@@ -148,6 +148,13 @@ header h1 {
   margin: 5px;
 }
 
+.add-form-container .error-message {
+  color: red;
+  text-align: center;
+  margin: 0;
+  font-size: 1rem;
+}
+
 label {
   display: flex;
   color: #082c1b;
@@ -183,6 +190,13 @@ form button:disabled {
   color: black;
   border-radius: 5px;
   border: 1px solid grey;
+}
+
+.rep-name-input {
+  margin-left: 5px;
+  color: black;
+  background: #e9ecef;
+  width: 60px;
 }
 
 select {

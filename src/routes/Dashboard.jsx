@@ -120,7 +120,7 @@ function Dashboard() {
           />
         </div>
       </div>
-      <Form metrics={metrics} />
+      <Form />
     </div>
   );
 }
