@@ -39,13 +39,14 @@ function Dashboard() {
     try {
       const { data, error } = await supabase.from("sales_deals").select(
         `
-          name,
-          value.sum()
+            value.sum(),
+            ...user_profiles!inner(name)
           `
       );
       if (error) {
         throw error;
       }
+      // * data now has name at top level: { sum: 1000, name: "Jim" }
       setMetrics(data);
     } catch (error) {
       console.error("Error fetching metrics:", error);
