@@ -43,6 +43,7 @@
 ```
 
 **In our project:**
+
 - No backend server needed!
 - Supabase handles auth, database, and security
 - Just install `@supabase/supabase-js` and connect!
@@ -55,7 +56,7 @@
 
 ```javascript
 // supabase-client.js
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL,
@@ -73,10 +74,10 @@ const { data, error } = await supabase.auth.signUp({
   password: password,
   options: {
     data: {
-      name: name,              // 👈 Custom user data
-      account_type: accountType // 👈 "rep" or "admin"
-    }
-  }
+      name: name, // 👈 Custom user data
+      account_type: accountType, // 👈 "rep" or "admin"
+    },
+  },
 });
 ```
 
@@ -87,7 +88,7 @@ const { data, error } = await supabase.auth.signUp({
 ```javascript
 const { data, error } = await supabase.auth.signInWithPassword({
   email: email.toLowerCase(),
-  password: password
+  password: password,
 });
 ```
 
@@ -117,6 +118,7 @@ useEffect(() => {
 ```
 
 **When does session change?**
+
 - ✅ User signs in → `session` goes from `null` to `{user data}`
 - ✅ User signs out → `session` goes from `{user data}` to `null`
 - ✅ Page refresh → Session gets re-fetched
@@ -152,11 +154,11 @@ useEffect(() => {
 
 ### Table Purposes
 
-| Table | Purpose | Key Columns |
-|-------|---------|-------------|
-| `auth.users` | Supabase managed auth | `id`, `email`, `raw_user_meta_data` |
-| `user_profiles` | Our custom user data | `id`, `name`, `account_type` |
-| `sales_deals` | Deal records | `id`, `user_id`, `value` |
+| Table           | Purpose               | Key Columns                         |
+| --------------- | --------------------- | ----------------------------------- |
+| `auth.users`    | Supabase managed auth | `id`, `email`, `raw_user_meta_data` |
+| `user_profiles` | Our custom user data  | `id`, `name`, `account_type`        |
+| `sales_deals`   | Deal records          | `id`, `user_id`, `value`            |
 
 ---
 
@@ -183,10 +185,10 @@ useEffect(() => {
 
 When you try to insert a deal with `user_id = "abc123"`:
 
-1. **🔍 Check:** FK says *"Wait! Let me check `user_profiles` table..."*
+1. **🔍 Check:** FK says _"Wait! Let me check `user_profiles` table..."_
 2. **❓ Question:** Does `id = "abc123"` exist in `user_profiles`?
-   - ✅ **YES** → *"Okay, insert the deal!"*
-   - ❌ **NO** → *"ERROR! This user doesn't exist. Deal rejected!"*
+   - ✅ **YES** → _"Okay, insert the deal!"_
+   - ❌ **NO** → _"ERROR! This user doesn't exist. Deal rejected!"_
 
 ### 🔄 Real-World Flow
 
@@ -206,24 +208,24 @@ await supabase.from("sales_deals").insert(newDeal);
 
 ### 💡 Benefits of Foreign Keys
 
-| Feature | Description |
-|---------|-------------|
-| **Data Integrity** | Prevents orphan records (deals without users) |
-| **Automatic JOINs** | Enables Supabase spread syntax `...table!inner()` |
-| **Cascading Actions** | Auto-delete deals when user is deleted |
-| **Safety** | Database enforces rules, not just app code |
+| Feature               | Description                                       |
+| --------------------- | ------------------------------------------------- |
+| **Data Integrity**    | Prevents orphan records (deals without users)     |
+| **Automatic JOINs**   | Enables Supabase spread syntax `...table!inner()` |
+| **Cascading Actions** | Auto-delete deals when user is deleted            |
+| **Safety**            | Database enforces rules, not just app code        |
 
 ### Creating a Foreign Key
 
 ```sql
-ALTER TABLE public.sales_deals 
-ADD CONSTRAINT sales_deals_user_id_fkey 
-FOREIGN KEY (user_id) 
+ALTER TABLE public.sales_deals
+ADD CONSTRAINT sales_deals_user_id_fkey
+FOREIGN KEY (user_id)
 REFERENCES public.user_profiles(id) ON DELETE CASCADE;
 ```
 
 **Key Takeaway:** FK = Database Bouncer 🚪  
-*"You're not on the list (`user_profiles`)? You can't make deals!"*
+_"You're not on the list (`user_profiles`)? You can't make deals!"_
 
 ---
 
@@ -242,11 +244,11 @@ REFERENCES public.user_profiles(id) ON DELETE CASCADE;
 ```sql
 -- STEP 1: Create the function (what to do)
 create function public.handle_new_user()
-returns trigger 
-language plpgsql 
+returns trigger
+language plpgsql
 security definer
 set search_path = ''
-as $$ 
+as $$
 begin
   insert into public.user_profiles (id, name, account_type)
   values (
@@ -261,7 +263,7 @@ $$;
 -- STEP 2: Create the trigger (when to run it)
 create trigger on_auth_user_created
   after insert on auth.users
-  for each row 
+  for each row
   execute procedure public.handle_new_user();
 ```
 
@@ -320,6 +322,7 @@ WITH CHECK (
 ```
 
 **Translation:**
+
 - Only logged-in users (`authenticated`)
 - Deal's `user_id` must match current user's ID (`auth.uid()`)
 - User must have `account_type = 'rep'`
@@ -341,6 +344,7 @@ WITH CHECK (
 ```
 
 **Translation:**
+
 - Only logged-in users
 - User must have `account_type = 'admin'`
 - No `user_id` check → can add deals for anyone!
@@ -384,13 +388,13 @@ useEffect(() => {
     .on(
       "postgres_changes",
       {
-        event: "*",              // INSERT, UPDATE, DELETE, or *
+        event: "*", // INSERT, UPDATE, DELETE, or *
         schema: "public",
         table: "sales_deals",
       },
       (payload) => {
         console.log(payload);
-        fetchMetrics();          // Re-fetch data when change happens
+        fetchMetrics(); // Re-fetch data when change happens
       }
     )
     .subscribe();
@@ -418,12 +422,12 @@ User A adds a deal → Database updates
 
 ### Event Types
 
-| Event | When it fires |
-|-------|---------------|
-| `INSERT` | New row added |
-| `UPDATE` | Row modified |
-| `DELETE` | Row deleted |
-| `*` | Any change (all events) |
+| Event    | When it fires           |
+| -------- | ----------------------- |
+| `INSERT` | New row added           |
+| `UPDATE` | Row modified            |
+| `DELETE` | Row deleted             |
+| `*`      | Any change (all events) |
 
 ---
 
@@ -445,6 +449,7 @@ GROUP BY user_profiles.name;
 ```
 
 **Result:**
+
 ```
 name    | sum
 --------|------
@@ -456,21 +461,20 @@ bob     | 1200
 ### Supabase JOIN Syntax (JavaScript)
 
 ```javascript
-const { data, error } = await supabase
-  .from("sales_deals")
-  .select(`
+const { data, error } = await supabase.from("sales_deals").select(`
     value.sum(),
     ...user_profiles!inner(name)
   `);
 ```
 
 **Result:**
+
 ```javascript
 [
   { sum: 5000, name: "Jim" },
   { sum: 3500, name: "Sakshi" },
-  { sum: 1200, name: "bob" }
-]
+  { sum: 1200, name: "bob" },
+];
 ```
 
 ### The Magic Spread Operator `...`
@@ -485,8 +489,8 @@ Requires **foreign key relationship** to exist!
 
 ```sql
 -- Must have this FK for Supabase JOIN to work
-ALTER TABLE sales_deals 
-ADD CONSTRAINT sales_deals_user_id_fkey 
+ALTER TABLE sales_deals
+ADD CONSTRAINT sales_deals_user_id_fkey
 FOREIGN KEY (user_id) REFERENCES user_profiles(id);
 ```
 
@@ -520,37 +524,43 @@ FOREIGN KEY (user_id) REFERENCES user_profiles(id);
 
 ## 💡 Key Takeaways
 
-| Concept | Purpose | Key Benefit |
-|---------|---------|-------------|
-| **Authentication** | User login/logout | Secure user sessions |
-| **Triggers** | Auto-create profiles | No manual sync needed |
-| **Foreign Keys** | Link tables | Data integrity + JOINs |
-| **RLS Policies** | Access control | Database-level security |
-| **Realtime** | Live updates | Instant UI sync |
-| **JOINs** | Combine tables | Get related data easily |
+| Concept            | Purpose              | Key Benefit             |
+| ------------------ | -------------------- | ----------------------- |
+| **Authentication** | User login/logout    | Secure user sessions    |
+| **Triggers**       | Auto-create profiles | No manual sync needed   |
+| **Foreign Keys**   | Link tables          | Data integrity + JOINs  |
+| **RLS Policies**   | Access control       | Database-level security |
+| **Realtime**       | Live updates         | Instant UI sync         |
+| **JOINs**          | Combine tables       | Get related data easily |
 
 ---
 
 ## 🚀 Quick Reference
 
 ### Check if FK exists
+
 ```sql
-SELECT * FROM information_schema.table_constraints 
+SELECT * FROM information_schema.table_constraints
 WHERE table_name = 'sales_deals';
 ```
 
 ### Drop and recreate policy
+
 ```sql
 DROP POLICY IF EXISTS "policy_name" ON table_name;
 CREATE POLICY...
 ```
 
 ### Test realtime in console
+
 ```javascript
 supabase
-  .channel('test')
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'sales_deals' }, 
-    payload => console.log(payload))
+  .channel("test")
+  .on(
+    "postgres_changes",
+    { event: "*", schema: "public", table: "sales_deals" },
+    (payload) => console.log(payload)
+  )
   .subscribe();
 ```
 
