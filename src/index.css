@@ -405,3 +405,8 @@ animation: fadeIn 0.8s ease-out;
     transform: translateY(0);
   }
 }
+
+/* site-icon often known as - favicon */
+.favicon{
+  color:greenyellow ;
+}
