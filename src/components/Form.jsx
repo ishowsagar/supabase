@@ -4,7 +4,7 @@ import supabase from "../supabase-client";
 import { useAuth } from "../context/AuthContext";
 
 function Form({ metrics }) {
-  const { users } = useAuth();
+  const { users,session } = useAuth();
 
   // ? handle form submission with async action
   const [error, submitAction, isPending] = useActionState(
@@ -33,6 +33,9 @@ function Form({ metrics }) {
     },
     null // Initial state
   );
+
+  // ! finding currwent user who is live-on-site
+  const currentUser = users.find(user => user.id === session?.user?.id)
 
   // generate dropdown options from user_profiles table(whihc has name,id,acc_type info cols )
   // mapping over each user in user_profiles table to generate options in select menu for each name
