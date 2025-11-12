@@ -2,7 +2,7 @@ import { useState, createContext, useContext, useEffect } from "react";
 import supabase from "../supabase-client";
 const AuthContext = createContext();
 
-// render its children and provide access to session state
+//* render its children and provide access to session state
 export const AuthContextProvider = ({ children }) => {
   const [session, setSession] = useState(undefined);
   const [users, setUsers] = useState([]);
@@ -27,7 +27,12 @@ export const AuthContextProvider = ({ children }) => {
       setSession(session);
       console.log("session changed :", session);
     });
+  }, []);
 
+  // ! fetching users from user_profiles table which get populated from user having user metadata only👇
+  //  todo -  whenever someone logs in, logs out, or the session updates, you get fresh user data
+  //* whenever component first mounts and whenever session changes, re-run this
+  useEffect(() => {
     async function fetchUsers() {
       try {
         const { data, error } = await supabase
@@ -37,21 +42,22 @@ export const AuthContextProvider = ({ children }) => {
           throw error; // * throw the Supabase error directly
         }
         console.log(data);
+        // ! users state var - stores data from user_profiles --> name,id,account_type
         setUsers(data);
       } catch (err) {
         console.error("error fetching users:", err);
       }
     }
     fetchUsers();
-  }, []);
+  }, [session]);
 
-  //*Auth functions (signin, signup, logout)
+  //!Auth functions (signin, signup, logout)
 
   //  todo checks when we pass user that has logged in or not,
   const signInUser = async (email, password) => {
     //  but we will call in signin as there we are getting user email n pass
 
-    // ! authenticate user if have  this inputted this email/pass
+    // * authenticate user if have  this inputted this email/pass
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -77,7 +83,6 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  //*Auth functions (signup, logout)
   // ! sign out user and clear session
   const signOut = async () => {
     try {
@@ -132,7 +137,7 @@ export const AuthContextProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ session, signInUser, signOut, signUpNewUser }}
+      value={{ session, signInUser, signOut, signUpNewUser, users }}
     >
       {children}
     </AuthContext.Provider>
